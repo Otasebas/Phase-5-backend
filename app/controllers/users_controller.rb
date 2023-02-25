@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    skip_before_action :authorize, except: :me
+    # skip_before_action :authorize, except: :me
 
     def index
         user = User.all

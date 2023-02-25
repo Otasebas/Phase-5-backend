@@ -1,11 +1,6 @@
 class FriendrequestsController < ApplicationController
     skip_before_action :authorize
 
-    def index
-        friend = Friendrequest.all
-        render json: friend
-    end
-
     #sending a friend request
     def create
         receiver = User.find_by(username: params[:username])
@@ -41,14 +36,6 @@ class FriendrequestsController < ApplicationController
 
         render json: friend_request, status: :ok
     end
-
-    #declining a request
-    # def decline
-    #     friend_request = Friendrequest.find_by(id: params[:id])
-    #     friend_request.destroy
-
-    #     head :no_content
-    # end
 
     def remove
         friend_request = Friendrequest.find_by(id: params[:id])
