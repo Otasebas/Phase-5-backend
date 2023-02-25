@@ -11,6 +11,8 @@ class User < ApplicationRecord
 
     has_secure_password
 
+    has_many :personal_calendars
+
     validates_presence_of :username, :password, :email, :phone_number, :nickname
     validates :username, uniqueness: true
     validates :phone_number, length: { minimum: 9 }
