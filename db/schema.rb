@@ -10,13 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_25_203343) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_26_001712) do
+  create_table "friend_groups", force: :cascade do |t|
+    t.string "group_name"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_friend_groups_on_user_id"
+  end
+
   create_table "friendrequests", force: :cascade do |t|
     t.integer "requestor_id"
     t.integer "receiver_id"
-    t.boolean "friends?", default: false
+    t.boolean "friends?"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "members", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "friend_group_id", null: false
+    t.boolean "joined"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_group_id"], name: "index_members_on_friend_group_id"
+    t.index ["user_id"], name: "index_members_on_user_id"
   end
 
   create_table "personal_calendars", force: :cascade do |t|
@@ -41,5 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_203343) do
     t.string "nickname"
   end
 
+  add_foreign_key "friend_groups", "users"
+  add_foreign_key "members", "friend_groups"
+  add_foreign_key "members", "users"
   add_foreign_key "personal_calendars", "users"
 end

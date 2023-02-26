@@ -1,10 +1,16 @@
 class UsersController < ApplicationController
-    # skip_before_action :authorize, except: :me
+    skip_before_action :authorize, except: :me
 
     def index
         user = User.all
         render json: user
     end
+
+    def member
+        user = current_user
+        member_groups = user.members.includes(:friend_group).map(&:friend_group)
+        render json: member_groups
+      end
 
     def show
         user = User.find_by(id: params[:id])

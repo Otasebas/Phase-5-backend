@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :personal_calendars
+  resources :members
+  resources :friend_groups
+  resources :personal_calendars, only: [:index, :create, :destroy]
   resources :users
   
   #user
@@ -13,5 +15,9 @@ Rails.application.routes.draw do
   post "/request", to: "friendrequests#create"
   patch "/accept/:id", to: "friendrequests#update"
   delete "/remove/:id", to: "friendrequests#remove"
+
+  #groups
+  get "/owner", to: "friend_groups#owner"
+  get "/member", to: "users#member"
 
 end

@@ -12,9 +12,14 @@ class User < ApplicationRecord
     has_secure_password
 
     has_many :personal_calendars
+    has_many :friend_groups
+
+    has_many :members
+    has_many :friend_groups ,through: :members
 
     validates_presence_of :username, :password, :email, :phone_number, :nickname
     validates :username, uniqueness: true
     validates :phone_number, length: { minimum: 9 }
     validates :phone_number, length: { maximum: 11 }
+    validates :username, length: { maximum: 20 }
 end
