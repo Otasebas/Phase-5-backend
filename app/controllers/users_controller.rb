@@ -6,11 +6,15 @@ class UsersController < ApplicationController
         render json: user
     end
 
-    def member
-        user = current_user
-        member_groups = user.members.includes(:friend_group).map(&:friend_group)
-        render json: member_groups
-      end
+    def membergroups
+        user = User.find_by(id: current_user.id)
+        memberships = user.members.where(joined: true)
+      
+          groups = memberships.map do |membership|
+            membership.friend_group
+          end
+          render json: groups
+    end
 
     def show
         user = User.find_by(id: params[:id])

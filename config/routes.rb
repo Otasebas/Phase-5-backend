@@ -18,6 +18,10 @@ Rails.application.routes.draw do
 
   #groups
   get "/owner", to: "friend_groups#owner"
-  get "/member", to: "users#member"
+  get "/membergroups", to: "users#membergroups"
+  delete "/leave/:id", to: "members#leave"
+  post "/invite", to: "members#invite"
+  patch "/acceptinvite/:id", to: "members#acceptinvite"
+  delete "/removeinvite/:id", to: "members#declineinvite"
 
 end
