@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :nickname, :friends, :pending, :request
+  attributes :id, :username, :nickname, :friends, :pending, :request, :group_invites, :groups_member_of
 
   # has_many :friend_requests_as_requestor
   # has_many :friend_requests_as_receiver
@@ -86,6 +86,28 @@ class UserSerializer < ActiveModel::Serializer
     end
 
     pendings
+  end
+
+  def groups_member_of
+    memberships = object.members.where(joined: true).all
+    groups = memberships.map do |membership|
+      membership.friend_group
+    end
+  end
+
+  def group_invites
+    memberships = object.members.where(joined: false).all
+    groups = memberships.map do |membership|
+      {
+        id: membership.id,
+        group_id: membership.friend_group.id,
+        group_name: membership.friend_group.group_name,
+        creator: {
+          id: membership.friend_group.user.id,
+          username: membership.friend_group.user.username
+        }
+      }
+    end
   end
 
 end

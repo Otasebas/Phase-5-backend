@@ -1,4 +1,5 @@
 class FriendGroupsController < ApplicationController
+    skip_before_action :authorize
 
     def owner
         groups = FriendGroup.where(user: current_user)
@@ -16,8 +17,8 @@ class FriendGroupsController < ApplicationController
             unless member.valid?
               invite_errors << member.errors.full_messages
             end
-          end
-          if invite_errors.empty?
+        end
+        if invite_errors.empty?
             invites.each do |invite|
               Member.create!(user_id: invite[:id], friend_group: group, joined: false)
             end
@@ -29,6 +30,20 @@ class FriendGroupsController < ApplicationController
           render json: { error: group.errors.full_messages }, status: :unprocessable_entity
         end
       end
+
+    def show
+        group = FriendGroup.find_by(id: params[:id])
+        render json: group
+    end
+
+    def destroy
+        group = FriendGroup.find_by(id: params[:id])
+        group.destroy
+    
+        head :no_content
+      end
+
+    private
 
     def group_params
         params.permit(:user_id, :group_name)
