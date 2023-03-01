@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
+  resources :event_users
+  resources :calendar_dates
   resources :members
   resources :friend_groups
-  resources :personal_calendars, only: [:index, :create, :destroy]
   resources :users
   
   #user
@@ -23,5 +24,21 @@ Rails.application.routes.draw do
   post "/invite", to: "members#invite"
   patch "/acceptinvite/:id", to: "members#acceptinvite"
   delete "/removeinvite/:id", to: "members#declineinvite"
+
+  #calendar
+  post "/createpersonalevent", to: "calendar_dates#createpersonal"
+  get "/personaldates", to: "calendar_dates#personal"
+  delete "/personaldates/:id", to: "calendar_dates#destroypersonal"
+
+  get "/groupdates", to: "calendar_dates#groups"
+
+  post "/createevent", to: "calendar_dates#event"
+  get "/events/:id", to: "calendar_dates#grab"
+  patch "/saveevent/:id", to: "calendar_dates#plan"
+  patch "/sendinvite/:id", to: "calendar_dates#sendinvites"
+
+  get "/events", to: "calendar_dates#user_events"
+
+  get "/anyevent/:id", to: "calendar_dates#user_event"
 
 end

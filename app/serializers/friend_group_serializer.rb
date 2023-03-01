@@ -11,7 +11,9 @@ class FriendGroupSerializer < ActiveModel::Serializer
       { id: membership.user.id, 
         username: membership.user.username, 
         nickname: membership.user.nickname,
-        member_id: membership.id
+        member_id: membership.id,
+        friend_group_id: object.id,
+        phone_number: membership.user.phone_number
       }
     end
   end
