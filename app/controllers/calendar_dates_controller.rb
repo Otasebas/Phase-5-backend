@@ -135,6 +135,26 @@ class CalendarDatesController < ApplicationController
 
         render json: event
     end
+
+    def accepteventinvite
+        event = CalendarDate.find_by(id: params[:id])
+
+        invite = event.event_users.where(user: current_user).first
+
+        invite.update(attendance: "accepted")
+
+        render json: invite
+    end
+
+    def declineeventinvite
+        event = CalendarDate.find_by(id: params[:id])
+
+        invite = event.event_users.where(user: current_user).first
+
+        invite.update(attendance: "declined")
+
+        render json: invite
+    end
       
     private
 
