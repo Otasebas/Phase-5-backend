@@ -10,7 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_26_001712) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_27_203123) do
+  create_table "calendar_dates", force: :cascade do |t|
+    t.string "date"
+    t.string "name_of_event"
+    t.string "start_time"
+    t.string "end_time"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "event_users", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "calendar_date_id", null: false
+    t.boolean "creator"
+    t.string "attendance"
+    t.integer "friend_group_id"
+    t.boolean "invite_sent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_date_id"], name: "index_event_users_on_calendar_date_id"
+    t.index ["friend_group_id"], name: "index_event_users_on_friend_group_id"
+    t.index ["user_id"], name: "index_event_users_on_user_id"
+  end
+
   create_table "friend_groups", force: :cascade do |t|
     t.string "group_name"
     t.integer "user_id", null: false
@@ -37,18 +61,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_26_001712) do
     t.index ["user_id"], name: "index_members_on_user_id"
   end
 
-  create_table "personal_calendars", force: :cascade do |t|
-    t.string "date"
-    t.string "name_of_event"
-    t.string "start_time"
-    t.string "end_time"
-    t.string "description"
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_personal_calendars_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "email"
@@ -59,8 +71,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_26_001712) do
     t.string "nickname"
   end
 
+  add_foreign_key "event_users", "calendar_dates"
+  add_foreign_key "event_users", "friend_groups"
+  add_foreign_key "event_users", "users"
   add_foreign_key "friend_groups", "users"
   add_foreign_key "members", "friend_groups"
   add_foreign_key "members", "users"
-  add_foreign_key "personal_calendars", "users"
 end

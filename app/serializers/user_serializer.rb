@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :nickname, :friends, :pending, :request, :group_invites, :groups_member_of
+  attributes :id, :username, :nickname, :friends, :pending, :request, :group_invites, :groups_member_of, :event_invites
 
   # has_many :friend_requests_as_requestor
   # has_many :friend_requests_as_receiver
@@ -24,7 +24,8 @@ class UserSerializer < ActiveModel::Serializer
           username: friend_user.username,
           phone_number: friend_user.phone_number,
           nickname: friend_user.nickname,
-          request_id: request.id
+          request_id: request.id,
+          friend_group_id: nil
         }
       end
     end
@@ -108,6 +109,13 @@ class UserSerializer < ActiveModel::Serializer
         }
       }
     end
+  end
+
+  def event_invites
+    object.event_users
+          .where(attendance: "pending", invite_sent: true)
+          .includes(:calendar_date)
+          .map(&:calendar_date)
   end
 
 end

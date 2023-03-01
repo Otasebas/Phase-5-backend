@@ -1,5 +1,5 @@
 class FriendGroupsController < ApplicationController
-    skip_before_action :authorize
+    # skip_before_action :authorize
 
     def owner
         groups = FriendGroup.where(user: current_user)
@@ -23,13 +23,13 @@ class FriendGroupsController < ApplicationController
               Member.create!(user_id: invite[:id], friend_group: group, joined: false)
             end
             render json: group, status: :created
-          else
+        else
             render json: { error: invite_errors.flatten }, status: :unprocessable_entity
-          end
+        end
         else
           render json: { error: group.errors.full_messages }, status: :unprocessable_entity
         end
-      end
+    end
 
     def show
         group = FriendGroup.find_by(id: params[:id])

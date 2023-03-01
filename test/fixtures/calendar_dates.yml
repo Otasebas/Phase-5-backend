@@ -6,7 +6,6 @@ one:
   start_time: MyString
   end_time: MyString
   description: MyString
-  user: one
 
 two:
   date: MyString
@@ -14,4 +13,3 @@ two:
   start_time: MyString
   end_time: MyString
   description: MyString
-  user: two
