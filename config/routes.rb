@@ -36,6 +36,8 @@ Rails.application.routes.draw do
   get "/events/:id", to: "calendar_dates#grab"
   patch "/saveevent/:id", to: "calendar_dates#plan"
   patch "/sendinvite/:id", to: "calendar_dates#sendinvites"
+  patch "/accepteventinvite/:id", to: "calendar_dates#accepteventinvite"
+  patch "/declineeventinvite/:id", to: "calendar_dates#declineeventinvite"
 
   get "/events", to: "calendar_dates#user_events"
 

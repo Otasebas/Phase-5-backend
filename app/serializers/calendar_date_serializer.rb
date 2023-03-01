@@ -53,6 +53,24 @@ class CalendarDateSerializer < ActiveModel::Serializer
         nickname: friend.user.nickname,
         attendance: friend.attendance
       }
+    end
+
+    if allmembers.any? { |member| member[:id] == current_user.id }
+      allmembers.reject! { |member| member[:id] == current_user.id }
+    end
+
+    # add current_user to the beginning of the array
+    current_user_invites = {
+      id: current_user.id,
+      username: current_user.username,
+      phone_number: current_user.phone_number,
+      nickname: current_user.nickname,
+      attendance: nil
+    }
+
+    allmembers.unshift(current_user_invites)
+
+    allmembers
   end
-  end
+
 end

@@ -1,5 +1,5 @@
 class UserSerializer < ActiveModel::Serializer
-  attributes :id, :username, :nickname, :friends, :pending, :request, :group_invites, :groups_member_of, :event_invites
+  attributes :id, :username, :nickname, :friends, :pending, :request, :group_invites, :groups_member_of, :event_invites, :declined_invites
 
   # has_many :friend_requests_as_requestor
   # has_many :friend_requests_as_receiver
@@ -115,7 +115,33 @@ class UserSerializer < ActiveModel::Serializer
     object.event_users
           .where(attendance: "pending", invite_sent: true)
           .includes(:calendar_date)
-          .map(&:calendar_date)
+          .map do |event_user|
+            {
+              calendar_date: event_user.calendar_date.as_json,
+              going: event_user.calendar_date.event_users
+                                        .where(invite_sent: true)
+                                        .where(attendance: ["accepted", "pending"]).map do |each|
+                                          each.user
+                                        end,
+              creator: event_user.calendar_date.event_users.where(creator: true).first.user
+            }
+          end
+  end
+
+  def declined_invites
+    object.event_users.where(attendance: "declined", invite_sent: true)
+    .includes(:calendar_date)
+    .map do |event_user|
+      {
+        calendar_date: event_user.calendar_date.as_json,
+        going: event_user.calendar_date.event_users
+                                  .where(invite_sent: true)
+                                  .where(attendance: ["accepted", "pending"]).map do |each|
+                                    each.user
+                                  end,
+        creator: event_user.calendar_date.event_users.where(creator: true).first.user
+      }
+    end
   end
 
 end

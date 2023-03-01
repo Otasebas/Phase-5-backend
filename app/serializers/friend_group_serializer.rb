@@ -1,5 +1,5 @@
 class FriendGroupSerializer < ActiveModel::Serializer
-  attributes :id, :group_name, :creator, :members
+  attributes :id, :group_name, :creator, :members, :group_calendar
   # has_one :user
   def creator
     object.user.username
@@ -16,5 +16,9 @@ class FriendGroupSerializer < ActiveModel::Serializer
         phone_number: membership.user.phone_number
       }
     end
+  end
+
+  def group_calendar
+    object.calendar_dates.uniq
   end
 end
